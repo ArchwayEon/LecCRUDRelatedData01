@@ -2,11 +2,16 @@
 
 namespace LecCRUDRelatedData01.Models.Entities;
 
+public enum Rating
+{
+    Poor, Mediocre, Fair, Good, Excellent
+}
+
 public class Recommendation
 {
     public int Id { get; set; }
 
-    public int Rating { get; set; }
+    public Rating Rating { get; set; }
 
     [StringLength(512)]
     public string Narrative { get; set; } = String.Empty;
