@@ -46,5 +46,22 @@ public class DbPersonRepository : IPersonRepository
             .Include(p => p.Recommendations)
             .ToList();
     }
+
+    public void UpdateRecommendation(int personId, Recommendation recommendation)
+    {
+        var person = Read(personId);
+        if(person != null)
+        {
+            var recommendationToUpdate = person.Recommendations
+                .FirstOrDefault(r => r.Id == recommendation.Id);
+            if(recommendationToUpdate != null)
+            {
+                recommendationToUpdate.Narrative = recommendation.Narrative;
+                recommendationToUpdate.Rating = recommendation.Rating;
+                _db.SaveChanges();
+            }
+        }
+    }
+
 }
 

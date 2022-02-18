@@ -7,5 +7,6 @@ public interface IPersonRepository
     Person? Read(int id);
     ICollection<Person> ReadAll();
     Recommendation CreateRecommendation(int personId, Recommendation recommendaton);
+    void UpdateRecommendation(int personId, Recommendation recommendation);
 }
 

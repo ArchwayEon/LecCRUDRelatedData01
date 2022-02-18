@@ -1,0 +1,54 @@
+﻿@using LecCRUDRelatedData01.Models.Entities;
+@model Recommendation
+
+@{
+    Person? person = (Person?)ViewData["Person"];
+    if (person == null) person = new();
+    ViewData["Title"] =
+      $"Edit recommendation for {person.FirstName} {person.MiddleName} {person.LastName}";
+}
+
+<h4>@ViewData["Title"]</h4>
+<hr />
+@if (Model != null)
+{
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" name="personId" value="@person.Id" />
+                <input asp-for="Id" type="hidden" value="@Model.Id" />
+
+                <div class="form-group">
+                    <label asp-for="Rating" class="control-label"></label>
+                    <select asp-for="Rating" class="form-select">
+                        @foreach (string rating in Enum.GetNames(typeof(Rating)))
+                        {
+                            <option value="@rating">@rating</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Rating" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Narrative" class="control-label"></label>
+                    <textarea asp-for="Narrative" class="form-control"></textarea>
+                    <span asp-validation-for="Narrative" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+<div>
+    <a asp-action="Details" asp-controller="Person" 
+      asp-route-id="@person.Id">Back to Person Details</a>
+</div>
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

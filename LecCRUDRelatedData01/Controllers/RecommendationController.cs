@@ -36,5 +36,35 @@ public class RecommendationController : Controller
         return View(recommendation);
     }
 
+    public IActionResult Edit([Bind(Prefix = "id")] int personId, int recId)
+    {
+        var person = _personRepo.Read(personId);
+        if (person == null)
+        {
+            return RedirectToAction("Index", "Person");
+        }
+        var recommendation = person.Recommendations.FirstOrDefault(r => r.Id == recId);
+        if (recommendation == null)
+        {
+            return RedirectToAction("Details", "Person", new { id = personId });
+        }
+        ViewData["Person"] = person;
+        return View(recommendation);
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public IActionResult Edit(int personId, Recommendation recommendation)
+    {
+        if (ModelState.IsValid)
+        {
+            _personRepo.UpdateRecommendation(personId, recommendation);
+            return RedirectToAction("Details", "Person", new { id = personId });
+        }
+        ViewData["Person"] = _personRepo.Read(personId);
+        return View(recommendation);
+    }
+
+
+
 }
 
