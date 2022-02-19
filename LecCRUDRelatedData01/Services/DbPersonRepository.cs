@@ -63,5 +63,19 @@ public class DbPersonRepository : IPersonRepository
         }
     }
 
+    public void DeleteRecommendation(int personId, int recommendationId)
+    {
+        var person = Read(personId);
+        if(person != null)
+        {
+            var recommendation = person.Recommendations
+               .FirstOrDefault(r => r.Id == recommendationId);
+            if(recommendation != null)
+            {
+                person.Recommendations.Remove(recommendation);
+                _db.SaveChanges();
+            }
+        }
+    }
 }
 

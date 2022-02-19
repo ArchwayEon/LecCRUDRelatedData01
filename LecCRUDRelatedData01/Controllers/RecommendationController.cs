@@ -64,7 +64,27 @@ public class RecommendationController : Controller
         return View(recommendation);
     }
 
+    public IActionResult Delete([Bind(Prefix = "id")] int personId, int recId)
+    {
+        var person = _personRepo.Read(personId);
+        if (person == null)
+        {
+            return RedirectToAction("Index", "Person");
+        }
+        var recommendation = person.Recommendations.FirstOrDefault(r => r.Id == recId);
+        if (recommendation == null)
+        {
+            return RedirectToAction("Details", "Person", new { id = personId });
+        }
+        ViewData["Person"] = person;
+        return View(recommendation);
+    }
 
-
+    [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
+    public IActionResult DeleteConfirmed(int id, int personId)
+    {
+        _personRepo.DeleteRecommendation(personId, id);
+        return RedirectToAction("Details", "Person", new { id = personId });
+    }
 }
 
